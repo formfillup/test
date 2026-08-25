@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enroll — Talent Zone</title>
+<meta name="description" content="Complete your enrollment or scholarship application at Talent Zone.">
+<link rel="icon" href="assets/logo.png" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="form-page">
+  <div class="form-card">
+    <div class="logo-row"><a href="index.html"><img src="assets/logo.png" alt="Talent Zone"></a></div>
+    <h1 id="formTitle">Enroll in Your Course</h1>
+    <p class="form-sub" id="formSub">Fill in your details to continue to payment.</p>
+
+    <form id="enrollForm" novalidate>
+      <div class="form-grid">
+        <div class="field full">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="e.g. Sadia Rahman" required>
+          <span class="error" id="err-fullName"></span>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          <span class="error" id="err-email"></span>
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="01XXXXXXXXX" required>
+          <span class="error" id="err-phone"></span>
+        </div>
+
+        <div class="field full">
+          <label for="address">Address</label>
+          <textarea id="address" name="address" rows="2" placeholder="House, road, area, district" required></textarea>
+          <span class="error" id="err-address"></span>
+        </div>
+
+        <div class="field full">
+          <label for="selectedCourse">Selected Course</label>
+          <input type="text" id="selectedCourse" name="selectedCourse" readonly>
+        </div>
+
+        <div class="field full" id="paymentField">
+          <label for="paymentMethod">Payment Method</label>
+          <select id="paymentMethod" name="paymentMethod" required>
+            <option value="">Select a payment method</option>
+            <option value="bKash">bKash</option>
+          
+          </select>
+          <span class="error" id="err-paymentMethod"></span>
+        </div>
+      </div>
+
+      <div class="form-submit">
+        <button type="submit" class="btn btn-primary btn-block" id="continueBtn">Continue</button>
+      </div>
+      <p class="form-note">Your information is only used to process this enrollment.</p>
+    </form>
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const course = params.get('course') || 'General Enrollment';
+  const price = params.get('price') || '0';
+  const type = params.get('type') === 'scholarship' ? 'scholarship' : 'buy';
+
+  const selectedCourseInput = document.getElementById('selectedCourse');
+  const priceLabel = (price && price !== '0') ? ` — ${Number(price).toLocaleString()} BDT` : '';
+  selectedCourseInput.value = course + priceLabel;
+
+  const formTitle = document.getElementById('formTitle');
+  const formSub = document.getElementById('formSub');
+  const continueBtn = document.getElementById('continueBtn');
+  const paymentField = document.getElementById('paymentField');
+  const paymentMethod = document.getElementById('paymentMethod');
+
+  if(type === 'scholarship'){
+    formTitle.textContent = 'Apply for Scholarship';
+    formSub.textContent = 'Submit your details and receive a scholarship reference code instantly.';
+    continueBtn.textContent = 'Submit Application';
+    paymentField.style.display = 'none';
+    paymentMethod.required = false;
+  }
+
+  function setError(id, msg){
+    document.getElementById('err-' + id).textContent = msg || '';
+  }
+
+  function generateRefCode(){
+    const digits = () => Math.floor(Math.random() * 10);
+    const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    const letter = () => letters[Math.floor(Math.random() * letters.length)];
+    return `${digits()}${digits()}${letter()}${letter()}${digits()}&${letter()}`;
+  }
+
+  document.getElementById('enrollForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    let valid = true;
+
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
+
+    if(!fullName){ setError('fullName','Please enter your full name.'); valid = false; } else setError('fullName','');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ setError('email','Please enter a valid email.'); valid = false; } else setError('email','');
+    if(!/^[0-9+\s-]{10,15}$/.test(phone)){ setError('phone','Please enter a valid phone number.'); valid = false; } else setError('phone','');
+    if(!address){ setError('address','Please enter your address.'); valid = false; } else setError('address','');
+
+    if(type !== 'scholarship'){
+      if(!paymentMethod.value){ setError('paymentMethod','Please select a payment method.'); valid = false; } else setError('paymentMethod','');
+    }
+
+    if(!valid) return;
+
+    if(type === 'scholarship'){
+      const refCode = generateRefCode();
+      sessionStorage.setItem('tz_scholarship_name', fullName);
+      sessionStorage.setItem('tz_scholarship_code', refCode);
+      sessionStorage.setItem('tz_scholarship_course', course);
+      window.location.href = 'scholarship-thankyou.html';
+    } else {
+     // Save all enrollment information
+localStorage.setItem("courseName", course);
+localStorage.setItem("coursePrice", price);
+localStorage.setItem("studentName", fullName);
+localStorage.setItem("studentEmail", email);
+localStorage.setItem("studentPhone", phone);
+localStorage.setItem("studentAddress", address);
+
+window.location.href = "bkash.html";
+    }
+  });
+
+
+</script>
+</body>
+</html>

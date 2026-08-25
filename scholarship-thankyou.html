@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scholarship Application Received — Talent Zone</title>
+<meta name="description" content="Your Talent Zone scholarship application has been received.">
+<link rel="icon" href="assets/logo.png" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="thanks-page">
+  <div class="thanks-card">
+    <div class="success-icon">✓</div>
+    <h1 id="thanksHeading">Thank You!</h1>
+    <p>Your scholarship application for <strong id="courseName">your course</strong> has been received. Please share your reference code with our WhatsApp to complete verification.</p>
+
+    <div class="ref-code" id="refCode">--------</div>
+
+    <div>
+      <a href="#" class="whatsapp-btn" id="whatsappBtn" target="_blank" rel="noopener">💬 Verify on WhatsApp</a>
+    </div>
+
+    <a href="index.html" class="thanks-back">← Back to Home</a>
+  </div>
+</div>
+
+<script>
+  const name = sessionStorage.getItem('tz_scholarship_name') || 'Student';
+  const code = sessionStorage.getItem('tz_scholarship_code');
+  const course = sessionStorage.getItem('tz_scholarship_course') || 'General Enrollment';
+
+  document.getElementById('thanksHeading').textContent = `Thank You, ${name}!`;
+  document.getElementById('courseName').textContent = course;
+
+  if(code){
+    document.getElementById('refCode').textContent = code;
+    const message = `Hello Talent Zone,\n\nMy Scholarship Reference Code is:\n${code}\n\nPlease verify my scholarship application.`;
+    document.getElementById('whatsappBtn').href = `https://wa.me/8801962143315?text=${encodeURIComponent(message)}`;
+  } else {
+    document.getElementById('refCode').textContent = 'No code found';
+    document.getElementById('whatsappBtn').href = 'https://wa.me/8801962143315';
+  }
+</script>
+</body>
+</html>

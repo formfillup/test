@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>bKash Payment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: #f4f6f9;
+  margin: 0;
+}
+
+.container {
+  max-width: 480px;
+  width: 95%;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.header {
+  background: #e2136e;
+  color: white;
+  text-align: center;
+  padding: 25px 15px;
+}
+
+.header img {
+  width: 80px;
+  margin-bottom: 10px;
+}
+
+.header p {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.content {
+  padding: 18px;
+}
+
+.amount-box {
+  text-align: center;
+  background: #fff3f7;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #e2136e;
+}
+
+.qr-box {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.qr-box img {
+  width: 160px;
+  max-width: 100%;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+}
+
+.instructions {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.instructions ol {
+  padding-left: 18px;
+}
+
+label {
+  font-size: 14px;
+  margin-top: 10px;
+  display: block;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 11px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 8px;
+  background: #e2136e;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #c91060;
+}
+
+/* SUCCESS SCREEN */
+
+.success-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #e2136e;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+.checkmark {
+  width: 100px;
+  height: 100px;
+  stroke: #2ecc71;
+  stroke-width: 4;
+  fill: none;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: draw 1s forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.success-text {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container" id="mainContent">
+
+    <div class="header">
+        <img src="bkash-logo.png" alt="bKash Logo">
+        <p>Administrative Fee</p>
+    </div>
+
+    <div class="content">
+
+        <div class="amount-box">
+  Amount to Pay:
+  <strong><span id="paymentAmount">300</span> BDT</strong>
+</div>
+
+        <div class="qr-box">
+            <img src="OR.jpeg" alt="QR Code">
+            <p>Scan & Pay via bKash</p>
+        </div>
+
+        <div class="instructions">
+            <strong>Instructions:</strong>
+            <ol>
+                <li>Open your bKash app</li>
+                <li>Tap <b>Send Money</b></li>
+                <li>Enter number: <b>01961398298</b></li>
+                <li>Enter amount: <b><span id="instructionAmount">300</span> BDT</b></li>
+                <li>Complete payment and copy Transaction ID</li>
+            </ol>
+        </div>
+
+        <form id="paymentForm">
+
+            <label>Your bKash Number</label>
+            <input type="text" required>
+
+            <label>Transaction ID</label>
+            <input type="text" required>
+
+            <label>Upload Payment Proof</label>
+            <input type="file" required>
+
+            <button type="submit">Submit Payment</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- SUCCESS SCREEN -->
+
+<div class="success-screen" id="successScreen">
+
+    <div id="loader" class="loader"></div>
+
+    <div id="successContent" style="display:none;">
+
+        <svg class="checkmark" viewBox="0 0 52 52">
+            <path d="M14 27 L22 35 L38 18"></path>
+        </svg>
+
+        <div class="success-text">
+            We are confirming your payment.<br><br>
+            Once it is verified, your Admit Card, Interview Time and Location will be sent to your email.
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+  // Read data from buy-form.html
+const courseName = localStorage.getItem("courseName") || "Course";
+const coursePrice = localStorage.getItem("coursePrice") || "300";
+
+// Update amount
+document.getElementById("paymentAmount").textContent = Number(coursePrice).toLocaleString();
+
+document.getElementById("instructionAmount").textContent = Number(coursePrice).toLocaleString();
+
+// Get amount from localStorage
+const amount = localStorage.getItem("coursePrice") || "300";
+
+// Update amount everywhere
+document.getElementById("paymentAmount").textContent = amount;
+document.getElementById("instructionAmount").textContent = amount;
+
+
+// Success animation
+
+const form = document.getElementById('paymentForm');
+const successScreen = document.getElementById('successScreen');
+const loader = document.getElementById('loader');
+const successContent = document.getElementById('successContent');
+
+form.addEventListener('submit', function(e) {
+
+    e.preventDefault();
+
+    successScreen.style.display = 'flex';
+
+    loader.style.display = 'block';
+    successContent.style.display = 'none';
+
+    setTimeout(() => {
+
+        loader.style.display = 'none';
+        successContent.style.display = 'block';
+
+    }, 2000);
+
+});
+
+</script>
+
+</body>
+</html>
