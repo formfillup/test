@@ -118,20 +118,24 @@
 
                 <!-- Call To Action (CTA) Section -->
                 <div class="pt-2 text-center">
-                    <a href="mailto:careers.aliexpress@gmail.com?subject=Application%20for%20Customer%20Support%20Executive%20(Remote)" 
-                       class="inline-flex items-center justify-center w-full bg-gradient-to-r from-[#FF4747] to-[#E62E04] hover:from-[#E62E04] hover:to-[#C02100] text-white font-bold text-lg py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 ease-in-out group">
+                    <button id="applyBtn"
+                       class="inline-flex items-center justify-center w-full bg-gradient-to-r from-[#FF4747] to-[#E62E04] hover:from-[#E62E04] hover:to-[#C02100] text-white font-bold text-lg py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 ease-in-out group cursor-pointer">
                         <span>Send Your CV</span>
                         <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                         </svg>
-                    </a>
+                    </button>
 
                     <!-- Fallback Contact Info -->
-                    <div class="mt-6 pt-6 border-t border-slate-100 text-xs sm:text-sm text-slate-500 space-y-1">
+                    <div class="mt-6 pt-6 border-t border-slate-100 text-xs sm:text-sm text-slate-500 space-y-2">
                         <p>Or send your resume manually to:</p>
-                        <p class="font-semibold text-slate-700 select-all">
-                            <a href="mailto:careers.aliexpress@gmail.com" class="text-red-600 hover:underline">careers.aliexpress@gmail.com</a>
-                        </p>
+                        <div class="flex items-center justify-center space-x-2">
+                            <span id="emailText" class="font-semibold text-slate-800 select-all">careers.aliexpress@gmail.com</span>
+                            <button id="copyBtn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-colors font-medium">
+                                Copy
+                            </button>
+                        </div>
+                        <p id="copyStatus" class="text-emerald-600 text-xs hidden font-medium">Copied to clipboard!</p>
                         <p class="pt-1 text-slate-600">
                             Call / WhatsApp: <a href="https://wa.me/8801727985629" target="_blank" class="font-semibold text-slate-800 hover:text-green-600 hover:underline">+880 1727-985629</a>
                         </p>
@@ -142,10 +146,106 @@
         </main>
     </div>
 
+    <!-- Options Modal for Desktop Users -->
+    <div id="applicationModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+            <button id="closeModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Apply for Position</h3>
+            <p class="text-sm text-slate-600 mb-6">Choose how you would like to send your CV to <strong>careers.aliexpress@gmail.com</strong>:</p>
+            
+            <div class="space-y-3">
+                <!-- Option 1: Web Gmail -->
+                <a id="gmailLink" target="_blank" href="https://mail.google.com/mail/?view=cm&fs=1&to=careers.aliexpress@gmail.com&su=Application%20for%20Customer%20Support%20Executive%20(Remote)" 
+                   class="w-full flex items-center justify-between p-3.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-semibold text-slate-700">
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 mr-3 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.545l8.073-6.052c1.618-1.214 3.927-.059 3.927 1.964z"/></svg>
+                        Open Web Gmail
+                    </span>
+                    <span class="text-xs text-slate-400">→</span>
+                </a>
+
+                <!-- Option 2: Default PC Mail Client -->
+                <a id="nativeMailLink" href="mailto:careers.aliexpress@gmail.com?subject=Application%20for%20Customer%20Support%20Executive%20(Remote)" 
+                   class="w-full flex items-center justify-between p-3.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-semibold text-slate-700">
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 mr-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        Default Mail App
+                    </span>
+                    <span class="text-xs text-slate-400">→</span>
+                </a>
+
+                <!-- Option 3: Copy Email Address -->
+                <button id="modalCopyBtn" class="w-full flex items-center justify-between p-3.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors font-semibold text-slate-700">
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 mr-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        Copy Email Address
+                    </span>
+                    <span id="modalCopyLabel" class="text-xs text-slate-400">Copy</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="text-center py-6 text-xs text-slate-400 border-t border-slate-200 bg-white">
         <p>&copy; 2026 AliExpress / Alibaba Group. All Rights Reserved.</p>
     </footer>
 
+    <!-- Responsive Action Script -->
+    <script>
+        const email = 'careers.aliexpress@gmail.com';
+        const applyBtn = document.getElementById('applyBtn');
+        const modal = document.getElementById('applicationModal');
+        const closeModal = document.getElementById('closeModal');
+        const copyBtn = document.getElementById('copyBtn');
+        const modalCopyBtn = document.getElementById('modalCopyBtn');
+        const copyStatus = document.getElementById('copyStatus');
+        const modalCopyLabel = document.getElementById('modalCopyLabel');
+
+        // Check if device is mobile (smartphones / tablets)
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+        }
+
+        // Handle Apply Button Click according to device type
+        applyBtn.addEventListener('click', () => {
+            const mailtoUrl = `mailto:${email}?subject=Application%20for%20Customer%20Support%20Executive%20(Remote)`;
+            
+            if (isMobileDevice()) {
+                // Phone behaviour: Open native mail app directly
+                window.location.href = mailtoUrl;
+            } else {
+                // Desktop behaviour: Show modal with options
+                modal.classList.remove('hidden');
+            }
+        });
+
+        // Close Modal
+        closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.add('hidden');
+        });
+
+        // Copy Helper Function
+        function copyEmailToClipboard(statusEl, labelEl) {
+            navigator.clipboard.writeText(email).then(() => {
+                if (statusEl) {
+                    statusEl.classList.remove('hidden');
+                    setTimeout(() => statusEl.classList.add('hidden'), 2500);
+                }
+                if (labelEl) {
+                    labelEl.textContent = 'Copied!';
+                    setTimeout(() => labelEl.textContent = 'Copy', 2500);
+                }
+            });
+        }
+
+        copyBtn.addEventListener('click', () => copyEmailToClipboard(copyStatus, null));
+        modalCopyBtn.addEventListener('click', () => copyEmailToClipboard(null, modalCopyLabel));
+    </script>
 </body>
 </html>
