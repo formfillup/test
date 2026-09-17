@@ -4,6 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AliExpress Is Hiring - Customer Support Executive (Remote)</title>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1068384286055229');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1068384286055229&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="aliexpress.png">
+
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
@@ -21,11 +43,9 @@
         <!-- Top Header Banner -->
         <header class="bg-gradient-to-r from-[#FF4747] to-[#E62E04] text-white shadow-md">
             <div class="max-w-4xl mx-auto px-4 py-2 sm:py-4 flex flex-row justify-between items-center">
-                <!-- Brand Logo / Name -->
-                <div class="flex items-center space-x-2">
-                    <span class="text-xl sm:text-3xl font-black italic tracking-tighter bg-white text-[#E62E04] px-2.5 py-0.5 sm:px-3 sm:py-1 rounded shadow-sm">
-                        AliExpress
-                    </span>
+                <!-- Brand Logo -->
+                <div class="flex items-center">
+                    <img src="logo.png" alt="AliExpress" class="h-9 sm:h-12 w-auto object-contain">
                 </div>
                 <!-- Official Domain -->
                 <a href="https://www.aliexpress.com" target="_blank" rel="noopener noreferrer" class="text-xs sm:text-sm font-medium tracking-wide hover:underline text-white/90">
@@ -102,6 +122,19 @@
                         </div>
                     </div>
 
+                    <!-- Who Can Apply -->
+                    <div class="flex items-center sm:items-start space-x-3 sm:space-x-4 p-2 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-100">
+                        <div class="bg-indigo-100 text-indigo-600 p-1.5 sm:p-2.5 rounded-lg flex-shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-[10px] sm:text-xs uppercase font-bold text-slate-400">Who Can Apply</h3>
+                            <p class="text-xs sm:text-base font-medium text-slate-800">Both freshers and experienced candidates are encouraged to apply. Candidates with relevant experience will receive preference during the selection process.</p>
+                        </div>
+                    </div>
+
                     <!-- Requirements -->
                     <div class="flex items-center sm:items-start space-x-3 sm:space-x-4 p-2 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-100">
                         <div class="bg-amber-100 text-amber-600 p-1.5 sm:p-2.5 rounded-lg flex-shrink-0">
@@ -111,7 +144,12 @@
                         </div>
                         <div>
                             <h3 class="text-[10px] sm:text-xs uppercase font-bold text-slate-400">Requirements</h3>
-                            <p class="text-xs sm:text-base font-medium text-slate-800">Freshers can apply; no prior experience required.</p>
+                            <ul class="text-xs sm:text-base font-medium text-slate-800 list-disc list-inside space-y-1 mt-1">
+                                <li>Excellent written and spoken English</li>
+                                <li>Experience handling international clients and support tickets</li>
+                                <li>Reliable high-speed internet and a quiet workspace</li>
+                                <li>Strong problem-solving and communication skills</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -195,7 +233,7 @@
         <p>&copy; 2026 AliExpress / Alibaba Group. All Rights Reserved.</p>
     </footer>
 
-    <!-- Responsive Action Script -->
+    <!-- Responsive Action Script & CAPI Triggers -->
     <script>
         const email = 'careers.aliexpress@gmail.com';
         const applyBtn = document.getElementById('applyBtn');
@@ -206,20 +244,54 @@
         const copyStatus = document.getElementById('copyStatus');
         const modalCopyLabel = document.getElementById('modalCopyLabel');
 
-        // Check if device is mobile (smartphones / tablets)
+        // Conversions API Server Dispatcher Function
+        function sendCapiEvent(eventName, testCode = 'TEST95199') {
+            const pixelId = '1068384286055229';
+            const accessToken = 'EAAfGlXBiQaMBSbvjj1Rat1ZCRMXKJSk6MRvVMBNcuFRGm5ngZC8dxYc6FN4bJdpSBLt7Q5PtZCTaeZA3aV0ZA0I9dQdBylFmCILZA0893CnZCiRob1D8Bk74IDPHbq9UbZCqlvf6TWUm04ZAgUkXrWYPxQQBZCfOvek2e4D1aEwnjiaKAUFHqRFXaHlsDeA8sTGZCuHwZDZD';
+            
+            const url = `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${accessToken}`;
+            
+            const payload = {
+                data: [{
+                    event_name: eventName,
+                    event_time: Math.floor(Date.now() / 1000),
+                    action_source: "website",
+                    event_source_url: window.location.href,
+                    user_data: {
+                        client_user_agent: navigator.userAgent
+                    }
+                }]
+            };
+
+            if (testCode) {
+                payload.test_event_code = testCode;
+            }
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error('CAPI Error:', err));
+        }
+
+        // Check if device is mobile
         function isMobileDevice() {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
         }
 
         // Handle Apply Button Click according to device type
         applyBtn.addEventListener('click', () => {
+            // Track SubmitApplication Event in Browser & via Conversions API
+            if (typeof fbq === 'function') {
+                fbq('track', 'SubmitApplication');
+            }
+            sendCapiEvent('SubmitApplication', 'TEST95199');
+
             const mailtoUrl = `mailto:${email}?subject=Application%20for%20Customer%20Support%20Executive%20(Remote)`;
             
             if (isMobileDevice()) {
-                // Phone behaviour: Open native mail app directly
                 window.location.href = mailtoUrl;
             } else {
-                // Desktop behaviour: Show modal with options
                 modal.classList.remove('hidden');
             }
         });
