@@ -20,8 +20,8 @@
      responsibilities — array of strings, or null to omit the section
      benefits      — array of strings, or null to omit the section
      shiftOptions   — array of shift-block labels the applicant can choose
-                      from on the application form, or null if this role
-                      has a fixed schedule (hides the field entirely)
+                       from on the application form, or null if this role
+                       has a fixed schedule (hides the field entirely)
    Leave a field as null (not an empty string) to hide that
    section entirely rather than showing it empty.
    =========================================================== */
@@ -38,13 +38,14 @@ const jobs = [
     experience: "No previous experience required.",
     eligibility: "Freshers are welcome to apply.",
     description:
-      "We are hiring Customer Support Executives for a remote full-time position. The role is suitable for both experienced applicants and freshers.",
+      "As a Customer Support Executive, you will be responsible for assisting customers, responding to their questions and concerns, resolving issues, and providing accurate information in a professional and friendly manner. You will communicate with customers through chat, email, or other support channels, handle complaints, follow up on requests, and escalate complex issues when necessary. The role requires strong communication and problem-solving skills, good written English, basic computer knowledge, and the ability to work independently in a remote environment.",
     requirements: [
       "Freshers can apply",
       "No previous experience required",
       "Must be available for an 8-hour full-time shift",
       "Must be able to work remotely"
     ],
+
     // Shift blocks the applicant can pick from on the application form.
     // Set to null (instead of an array) for jobs with a fixed schedule —
     // the shift-selection field is hidden automatically when this is null.
@@ -53,14 +54,17 @@ const jobs = [
       "8:00 AM – 4:00 PM (Morning)",
       "4:00 PM – 12:00 AM (Evening)"
     ],
+
     responsibilities: null,
     benefits: null
   }
 ];
 
+
 /* ===========================================================
    HELPERS
    =========================================================== */
+
 const $ = (sel, scope = document) => scope.querySelector(sel);
 const $$ = (sel, scope = document) => Array.from(scope.querySelectorAll(sel));
 
@@ -72,9 +76,11 @@ function el(tag, opts = {}) {
   return node;
 }
 
+
 /* ===========================================================
    NAV: mobile menu + smooth scroll + close on link click
    =========================================================== */
+
 const navToggle = $("#nav-toggle");
 const mobileMenu = $("#mobile-menu");
 
@@ -90,9 +96,11 @@ $$('a[data-scroll], .mobile-menu a').forEach((link) => {
   });
 });
 
+
 /* ===========================================================
    RENDER JOB CARDS
    =========================================================== */
+
 const jobGrid = $("#job-grid");
 
 function renderJobCards() {
@@ -141,9 +149,11 @@ function renderJobCards() {
   });
 }
 
+
 /* ===========================================================
    JOB DETAILS DRAWER
    =========================================================== */
+
 const drawerOverlay = $("#drawer-overlay");
 const jobDrawer = $("#job-drawer");
 const drawerContent = $("#drawer-content");
@@ -172,9 +182,11 @@ function buildDrawerContent(job) {
     const block = el("div", { class: "drawer-block" });
     block.appendChild(el("h4", { text: "Overview" }));
     const list = el("ul");
+
     overviewFacts.forEach(([label, value]) => {
       list.appendChild(el("li", { text: `${label}: ${value}` }));
     });
+
     block.appendChild(list);
     drawerContent.appendChild(block);
   }
@@ -190,14 +202,21 @@ function buildDrawerContent(job) {
   appendListBlock(drawerContent, "Requirements", job.requirements);
   appendListBlock(drawerContent, "Benefits", job.benefits);
 
-  const applyBtn = el("button", { class: "btn btn-primary btn-block btn-lg drawer-apply-btn", text: "Apply now" });
+  const applyBtn = el("button", {
+    class: "btn btn-primary btn-block btn-lg drawer-apply-btn",
+    text: "Apply now"
+  });
+
   applyBtn.type = "button";
+
   applyBtn.addEventListener("click", () => {
     closeDrawer();
     openApplyModal(job.id);
   });
+
   drawerContent.appendChild(applyBtn);
 }
+
 
 // Renders a titled section for an array field, or an
 // "information not yet available" note when the field is null.
@@ -207,7 +226,11 @@ function appendListBlock(container, title, items) {
 
   if (Array.isArray(items) && items.length) {
     const list = el("ul");
-    items.forEach((item) => list.appendChild(el("li", { text: item })));
+
+    items.forEach((item) => {
+      list.appendChild(el("li", { text: item }));
+    });
+
     block.appendChild(list);
     container.appendChild(block);
     return;
@@ -219,6 +242,7 @@ function appendListBlock(container, title, items) {
 function openDrawer(jobId) {
   const job = jobs.find((j) => j.id === jobId);
   if (!job) return;
+
   buildDrawerContent(job);
   drawerOverlay.classList.add("open");
   jobDrawer.classList.add("open");
@@ -228,20 +252,24 @@ function openDrawer(jobId) {
 function closeDrawer() {
   drawerOverlay.classList.remove("open");
   jobDrawer.classList.remove("open");
+
   if (!applyModal.classList.contains("open")) {
     document.body.classList.remove("no-scroll");
   }
 }
 
 drawerCloseBtn.addEventListener("click", closeDrawer);
+
 drawerOverlay.addEventListener("click", () => {
   closeDrawer();
   closeApplyModal();
 });
 
+
 /* ===========================================================
    APPLICATION MODAL
    =========================================================== */
+
 const modalOverlay = $("#modal-overlay");
 const applyModal = $("#apply-modal");
 const modalCloseBtn = $("#modal-close");
@@ -254,6 +282,7 @@ let currentJobId = null;
 
 function openApplyModal(jobId) {
   const job = jobs.find((j) => j.id === jobId);
+
   currentJobId = jobId;
   positionInput.value = job ? job.title : "";
 
@@ -262,14 +291,18 @@ function openApplyModal(jobId) {
   // submission for jobs with a fixed schedule.
   clearFieldError("f-shift");
   shiftSelect.classList.remove("invalid");
+
   if (job && Array.isArray(job.shiftOptions) && job.shiftOptions.length) {
-    shiftSelect.innerHTML = '<option value="" disabled selected>Select an 8-hour shift</option>';
+    shiftSelect.innerHTML =
+      '<option value="" disabled selected>Select an 8-hour shift</option>';
+
     job.shiftOptions.forEach((option) => {
       const opt = document.createElement("option");
       opt.value = option;
       opt.textContent = option;
       shiftSelect.appendChild(opt);
     });
+
     shiftField.hidden = false;
     shiftSelect.required = true;
   } else {
@@ -288,12 +321,14 @@ function openApplyModal(jobId) {
 function closeApplyModal() {
   modalOverlay.classList.remove("open");
   applyModal.classList.remove("open");
+
   if (!jobDrawer.classList.contains("open")) {
     document.body.classList.remove("no-scroll");
   }
 }
 
 modalCloseBtn.addEventListener("click", closeApplyModal);
+
 modalOverlay.addEventListener("click", () => {
   closeApplyModal();
   closeDrawer();
@@ -306,9 +341,11 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+
 /* ===========================================================
    CV UPLOAD (drag & drop + click to browse)
    =========================================================== */
+
 const dropzone = $("#dropzone");
 const cvInput = $("#f-cv");
 const dropzoneEmpty = $("#dropzone-empty");
@@ -325,6 +362,7 @@ dropzone.addEventListener("click", (e) => {
   if (e.target === fileRemoveBtn) return;
   cvInput.click();
 });
+
 dropzone.addEventListener("keydown", (e) => {
   if (e.key === "Enter" || e.key === " ") {
     e.preventDefault();
@@ -338,12 +376,14 @@ dropzone.addEventListener("keydown", (e) => {
     dropzone.classList.add("dragover");
   });
 });
+
 ["dragleave", "drop"].forEach((evt) => {
   dropzone.addEventListener(evt, (e) => {
     e.preventDefault();
     dropzone.classList.remove("dragover");
   });
 });
+
 dropzone.addEventListener("drop", (e) => {
   const file = e.dataTransfer.files[0];
   if (file) handleFile(file);
@@ -356,6 +396,7 @@ cvInput.addEventListener("change", () => {
 
 function handleFile(file) {
   const ext = "." + file.name.split(".").pop().toLowerCase();
+
   clearFieldError("f-cv");
   dropzone.classList.remove("invalid");
 
@@ -364,6 +405,7 @@ function handleFile(file) {
     dropzone.classList.add("invalid");
     return;
   }
+
   if (file.size > MAX_FILE_SIZE) {
     setFieldError("f-cv", "File is too large. Maximum size is 5MB.");
     dropzone.classList.add("invalid");
@@ -378,21 +420,25 @@ function handleFile(file) {
 
 fileRemoveBtn.addEventListener("click", (e) => {
   e.stopPropagation();
+
   selectedFile = null;
   cvInput.value = "";
   dropzoneFile.hidden = true;
   dropzoneEmpty.hidden = false;
 });
 
+
 /* ===========================================================
    FORM VALIDATION + SUBMISSION
    =========================================================== */
+
 const submitBtn = $("#submit-btn");
 const submitBtnText = $("#submit-btn-text");
 
 function setFieldError(fieldId, message) {
   const input = document.getElementById(fieldId);
   const errorEl = $(`[data-error-for="${fieldId}"]`);
+
   if (input) input.classList.add("invalid");
   if (errorEl) errorEl.textContent = message;
 }
@@ -400,6 +446,7 @@ function setFieldError(fieldId, message) {
 function clearFieldError(fieldId) {
   const input = document.getElementById(fieldId);
   const errorEl = $(`[data-error-for="${fieldId}"]`);
+
   if (input) input.classList.remove("invalid");
   if (errorEl) errorEl.textContent = "";
 }
@@ -409,6 +456,7 @@ function validateForm() {
 
   const name = $("#f-name").value.trim();
   clearFieldError("f-name");
+
   if (!name) {
     setFieldError("f-name", "Please enter your full name.");
     valid = false;
@@ -416,7 +464,9 @@ function validateForm() {
 
   const email = $("#f-email").value.trim();
   clearFieldError("f-email");
+
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   if (!email) {
     setFieldError("f-email", "Please enter your email address.");
     valid = false;
@@ -427,7 +477,9 @@ function validateForm() {
 
   const phone = $("#f-phone").value.trim();
   clearFieldError("f-phone");
+
   const phonePattern = /^[0-9+\-()\s]{6,20}$/;
+
   if (!phone) {
     setFieldError("f-phone", "Please enter your phone number.");
     valid = false;
@@ -438,6 +490,7 @@ function validateForm() {
 
   const location = $("#f-location").value.trim();
   clearFieldError("f-location");
+
   if (!location) {
     setFieldError("f-location", "Please enter your location or city.");
     valid = false;
@@ -445,6 +498,7 @@ function validateForm() {
 
   clearFieldError("f-shift");
   shiftSelect.classList.remove("invalid");
+
   if (shiftSelect.required && !shiftSelect.value) {
     setFieldError("f-shift", "Please select your preferred shift.");
     shiftSelect.classList.add("invalid");
@@ -453,6 +507,7 @@ function validateForm() {
 
   clearFieldError("f-cv");
   dropzone.classList.remove("invalid");
+
   if (!selectedFile) {
     setFieldError("f-cv", "Please upload your CV or resume.");
     dropzone.classList.add("invalid");
@@ -467,7 +522,14 @@ applyForm.addEventListener("submit", (e) => {
 
   if (!validateForm()) {
     const firstError = $(".invalid, .dropzone.invalid");
-    if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    if (firstError) {
+      firstError.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+
     return;
   }
 
@@ -489,22 +551,26 @@ applyForm.addEventListener("submit", (e) => {
   submitApplication(application);
 });
 
+
 // Placeholder submission handler. This is a frontend-only flow:
 // no data is stored or sent anywhere yet. Replace the inside of
 // this function with a real fetch()/API call when a backend is
 // ready — the rest of the form does not need to change.
 function submitApplication(application) {
   submitBtn.disabled = true;
-  submitBtnText.innerHTML = '<span class="spinner" aria-hidden="true"></span> Submitting application...';
+  submitBtnText.innerHTML =
+    '<span class="spinner" aria-hidden="true"></span> Submitting application...';
 
   setTimeout(() => {
     window.location.href = "thankyou.html";
   }, 1500);
 }
 
+
 /* ===========================================================
    MISC
    =========================================================== */
+
 $("#year").textContent = new Date().getFullYear();
 
 renderJobCards();
